@@ -71,9 +71,13 @@ while not rl.window_should_close():
 
         if grid[new_head] == -1:
             snake.length += 1
-            x = random.randint(0, CELLS - 1)
-            y = random.randint(0, CELLS - 1)
-            grid[x, y] = -1
+            while(True):
+                x = random.randint(0, CELLS - 1)
+                y = random.randint(0, CELLS - 1)
+                if grid[y, x] != 0:
+                    continue
+                grid[y, x] = -1
+                break
 
         snake.body.insert(0, new_head)
         if len(snake.body) > snake.length:
@@ -106,6 +110,7 @@ while not rl.window_should_close():
                 color,
             )
 
+    rl.draw_fps(0, 0)
     rl.draw_text(f"{steps} steps", HEIGHT + 8, 8, 24, rl.RAYWHITE)
     rl.draw_text(f"{snake.length} size", HEIGHT + 8, 32, 24, rl.RAYWHITE)
     rl.end_drawing()
