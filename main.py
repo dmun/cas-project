@@ -1,6 +1,8 @@
-import pyray as rl
-import numpy as np
+import random
 from enum import Enum
+
+import numpy as np
+import pyray as rl
 from pyray import KeyboardKey
 
 WIDTH = 800
@@ -22,7 +24,7 @@ class Direction(Enum):
 
 
 class Snake:
-    length = 8
+    length = 2
     body = [(8, 8)]
     dir = Direction.RIGHT
 
@@ -66,6 +68,13 @@ while not rl.window_should_close():
         steps += 1
         snake.resolve_direction(new_dir)
         new_head = (snake.body[0][0] + snake.dir.value[0], snake.body[0][1] + snake.dir.value[1])
+
+        if grid[new_head] == -1:
+            snake.length += 1
+            x = random.randint(0, CELLS - 1)
+            y = random.randint(0, CELLS - 1)
+            grid[x, y] = -1
+
         snake.body.insert(0, new_head)
         if len(snake.body) > snake.length:
             tail = snake.body.pop()
@@ -98,6 +107,7 @@ while not rl.window_should_close():
             )
 
     rl.draw_text(f"{steps} steps", HEIGHT + 8, 8, 24, rl.RAYWHITE)
+    rl.draw_text(f"{snake.length} size", HEIGHT + 8, 32, 24, rl.RAYWHITE)
     rl.end_drawing()
 
 rl.close_window()
